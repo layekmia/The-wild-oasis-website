@@ -1,13 +1,20 @@
 import Image from "next/image";
-import bg from '@/public/bg.png'
+import bg from "@/public/bg.png";
 import Link from "next/link";
 
 export default function Page() {
   return (
-    <main className="mt-24">
-      <Image src={bg} fill alt="Mountains and forests with two cabins" />
+    <main className="mt-24 ">
+      <Image
+        src={bg}
+        placeholder="blur"
+        quality={80}
+        className="object-cover object-top"
+        fill
+        alt="Mountains and forests with two cabins"
+      />
 
-      <div className="relative z-10 text-center">
+      <div className=" relative z-10 text-center">
         <h1 className="text-8xl text-primary-50 mb-10 tracking-tight font-normal">
           Welcome to paradise.
         </h1>
