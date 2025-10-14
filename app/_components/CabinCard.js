@@ -7,12 +7,17 @@ function CabinCard({ cabin }) {
 
   return (
     <div className="flex border-primary-800 border">
-      <Image
-        src={image}
-        alt={`Cabin ${name}`}
-        className="flex-1 border-r border-primary-800"
-        width={300}
-      />
+      <div className="flex-1 relative min-h-[200px]">
+        <Image
+          src={image}
+          alt={`Cabin ${name}`}
+          fill
+          sizes="(max-width:640px) 100vw, (max-width:1024px) 50vw, 33vw"
+          className="object-cover"
+        />
+        {/* border on parent so it is visible */}
+        <div className="absolute inset-y-0 right-0 w-[1px] bg-primary-800 pointer-events-none" />
+      </div>
 
       <div className="flex-grow">
         <div className="pt-5 pb-4 px-7 bg-primary-950">
