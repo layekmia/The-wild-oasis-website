@@ -6,7 +6,12 @@ export const metadata = {
   title: "Cabins",
 };
 
-export default function Page() {
+export const revalidate = 60; // it will defined after how many time the data re-fetched or re-generated the static page;
+
+export default function Page({searchParams}) { 
+  
+  const filter = searchParams?.capacity ?? "all";
+
   return (
     <div>
       <h1 className="text-4xl mb-5 text-accent-400 font-medium">
@@ -22,8 +27,8 @@ export default function Page() {
       </p>
 
       <Suspense fallback={<Spinner />}>
-        <CabinList />
+        <CabinList filter={filter} />
       </Suspense>
     </div>
   );
-}
+}``
