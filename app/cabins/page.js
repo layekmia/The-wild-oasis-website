@@ -1,16 +1,19 @@
 import { Suspense } from "react";
 import CabinList from "../_components/CabinList";
 import Spinner from "@/app/_components/Spinner";
+import Filter from "@/app/_components/Filter";
 
 export const metadata = {
   title: "Cabins",
 };
 
-export const revalidate = 60; // it will defined after how many time the data re-fetched or re-generated the static page;
+// export const revalidate = 60; // it will defined after how many time the data re-fetched or re-generated the static page;
 
 export default function Page({searchParams}) { 
   
   const filter = searchParams?.capacity ?? "all";
+
+  // Now the cabins page will always dynamic  render because we used searchParams Now we don't need to use revalidate in this page it's totally unnecessary .
 
   return (
     <div>
@@ -25,8 +28,10 @@ export default function Page({searchParams}) {
         home away from home. The perfect spot for a peaceful, calm vacation.
         Welcome to paradise.
       </p>
-
-      <Suspense fallback={<Spinner />}>
+      <div className="flex justify-end mb-8">
+        <Filter/>
+      </div>
+      <Suspense fallback={<Spinner />} key={filter}>
         <CabinList filter={filter} />
       </Suspense>
     </div>
