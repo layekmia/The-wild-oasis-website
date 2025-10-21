@@ -1,4 +1,4 @@
-import ReservationForm from "@/starter/components/ReservationForm";
+import ReservationForm from "@/app/_components/ReservationForm";
 import DateSelector from "./DateSelector";
 import { getBookedDatesByCabinId, getSettings } from "../_lib/data-service";
 
