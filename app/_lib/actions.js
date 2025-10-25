@@ -4,6 +4,39 @@ import { revalidatePath } from "next/cache";
 import { auth, signIn, signOut } from "./auth";
 import { supabase } from "./supabase";
 import { getBookings } from "./data-service";
+import { redirect } from "next/navigation";
+
+export async function updateBooking(formData) {
+  const { numGuests, bookingId, observations } = Object.fromEntries(
+    formData.entries()
+  );
+
+  const session = await auth();
+  if (!session) throw new Error("you must be logged in");
+
+  const bookings = await getBookings(session.user.guestId);
+
+  const bookingIds = bookings.map((booking) => booking.id);
+
+  if (!bookingIds.includes(Number(bookingId)))
+    throw new Error("You are not allowed update this booking ");
+
+  const updatedFields = { numGuests, observations };
+
+  const { data, error } = await supabase
+    .from("bookings")
+    .update(updatedFields)
+    .eq("id", bookingId)
+    .select()
+    .single();
+
+  if (error) {
+    console.error(error);
+    throw new Error("Booking could not be updated");
+  }
+  revalidatePath(`/account/reservations/edit/${bookingId}`);
+  redirect(`/account/reservations`);
+}
 
 export async function deleteReservation(bookingId) {
   const session = await auth();
@@ -11,9 +44,10 @@ export async function deleteReservation(bookingId) {
 
   const guestBookings = await getBookings(session.user.guestId);
 
-  const guestBookingIds = guestBookings.map((booking)=> booking.id);
+  const guestBookingIds = guestBookings.map((booking) => booking.id);
 
-  if(!guestBookingIds.includes(bookingId)) throw new Error("You are not allowed to delete this booking");
+  if (!guestBookingIds.includes(bookingId))
+    throw new Error("You are not allowed to delete this booking");
 
   const { data, error } = await supabase
     .from("bookings")
@@ -22,7 +56,7 @@ export async function deleteReservation(bookingId) {
 
   if (error) throw new Error("Booking could not be deleted");
 
-  revalidatePath('/account/reservations');
+  revalidatePath("/account/reservations");
 }
 
 export async function updateGuest(formData) {
