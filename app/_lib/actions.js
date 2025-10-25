@@ -7,34 +7,41 @@ import { getBookings } from "./data-service";
 import { redirect } from "next/navigation";
 
 export async function updateBooking(formData) {
+  // Parse form data
   const { numGuests, bookingId, observations } = Object.fromEntries(
     formData.entries()
   );
 
+  // Authentication
   const session = await auth();
   if (!session) throw new Error("you must be logged in");
 
+  // Authorization
   const bookings = await getBookings(session.user.guestId);
-
   const bookingIds = bookings.map((booking) => booking.id);
-
   if (!bookingIds.includes(Number(bookingId)))
     throw new Error("You are not allowed update this booking ");
 
+  // Building updated data
   const updatedFields = { numGuests, observations };
 
-  const { data, error } = await supabase
+  // Mutation
+  const { error } = await supabase
     .from("bookings")
     .update(updatedFields)
     .eq("id", bookingId)
     .select()
     .single();
 
+  // handle Errors
   if (error) {
     console.error(error);
     throw new Error("Booking could not be updated");
   }
+  // Redirect and Revalidate
   revalidatePath(`/account/reservations/edit/${bookingId}`);
+  revalidatePath(`/account/reservations`);
+
   redirect(`/account/reservations`);
 }
 
@@ -49,7 +56,7 @@ export async function deleteReservation(bookingId) {
   if (!guestBookingIds.includes(bookingId))
     throw new Error("You are not allowed to delete this booking");
 
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from("bookings")
     .delete()
     .eq("id", bookingId);
