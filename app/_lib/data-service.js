@@ -109,7 +109,7 @@ export async function getBookedDatesByCabinId(cabinId) {
 
     
   // For testing
-  await new Promise((res) => setTimeout(res, 1000));
+  // await new Promise((res) => setTimeout(res, 1000));
 
   if (error) {
     console.error(error);
