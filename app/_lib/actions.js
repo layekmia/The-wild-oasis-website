@@ -6,6 +6,43 @@ import { supabase } from "./supabase";
 import { getBookings } from "./data-service";
 import { redirect } from "next/navigation";
 
+export async function createBooking(bookingData, formData) {
+  // Authentication
+  const session = await auth();
+  if (!session) throw new Error("you must be logged in");
+
+  // building booking data
+  const newBooking = {
+    ...bookingData,
+    guestId: session.user.guestId,
+    numGuests: Number(formData.get("numGuests")),
+    observations: formData.get("observations").slice(0, 1000),
+    extrasPrice: 0,
+    totalPrice: bookingData.cabinPrice,
+    isPaid: false,
+    hasBreakfast: false,
+    status: "unconfirmed",
+  };
+
+  //  Mutation
+  const { data, error } = await supabase
+    .from("bookings")
+    .insert([newBooking])
+    // So that the newly created object gets returned!
+    .select()
+    .single();
+
+  // Error handle
+  if (error) {
+    console.error(error);
+    throw new Error("Booking could not be created");
+  }
+
+  revalidatePath(`/account/reservations`);
+  revalidatePath(`/cabins/${bookingData.cabinId}`);
+  redirect(`/cabins/thankyou`);
+}
+
 export async function updateBooking(formData) {
   // Parse form data
   const { numGuests, bookingId, observations } = Object.fromEntries(
@@ -23,7 +60,10 @@ export async function updateBooking(formData) {
     throw new Error("You are not allowed update this booking ");
 
   // Building updated data
-  const updatedFields = { numGuests, observations };
+  const updatedFields = {
+    numGuests,
+    observations: observations.slice(0, 1000),
+  };
 
   // Mutation
   const { error } = await supabase
@@ -40,12 +80,12 @@ export async function updateBooking(formData) {
   }
   // Redirect and Revalidate
   revalidatePath(`/account/reservations/edit/${bookingId}`);
-  revalidatePath(`/account/reservations`);
+  // revalidatePath(`/account/reservations`);
 
-  redirect(`/account/reservations`);
+  // redirect(`/account/reservations`);
 }
 
-export async function deleteReservation(bookingId) {
+export async function deleteBooking(bookingId) {
   const session = await auth();
   if (!session) throw new Error("You must be logged in");
 
