@@ -1,8 +1,8 @@
-import { getCabin } from "@/helpers/apiService";
+import { getBookedDatesByCabinId, getBooking, getBookings, getCabin, getGuestByEmail } from "@/helpers/apiService";
 
 export default async function Page() {
-  const cabin = await getCabin("690c037ce10286f50a18ef47");
-  console.log(cabin);
+  const guest = await getBookedDatesByCabinId("690c037ce10286f50a18ef45");
+  console.log(guest.data) 
 
   return <div>Home</div>;
 }

@@ -124,6 +124,8 @@ export async function GET(req: NextRequest) {
           $or: [{ startDate: { $gte: today } }, { status: "checked-in" }],
         });
 
+        console.log("Bookings for bookedDates:", bookings);
+
         if (!bookings.length)
           return NextResponse.json(
             { error: "No booked dates found" },

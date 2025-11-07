@@ -31,7 +31,7 @@ export interface IBooking {
   updatedAt?: Date;
 }
 
-export interface IGuests {
+export interface IGuest {
   _id?: Types.ObjectId;
   fullName: string;
   email: string;
