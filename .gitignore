@@ -19,9 +19,6 @@ note.txt
 /.next/
 /out/
 
-# Ignore seed folder
-src/seed/
-
 
 # production
 /build
