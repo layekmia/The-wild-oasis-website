@@ -4,11 +4,11 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { guestId: string } }
+  { params }: { params: Promise<{ guestId: string }> }
 ) {
   await dbConnect();
 
-  const { guestId } = params;
+  const { guestId } = await params;
   const updateData = await req.json();
 
   try {
