@@ -7,8 +7,10 @@ export async function PATCH(
   { params }: { params: { bookingId: string } }
 ) {
   await dbConnect();
-  const { bookingId } = params;
+  const { bookingId } = await params;
   const updateData = await req.json();
+
+  console.log("Updating booking with ID:", bookingId);
 
   try {
     const updatedBooking = await Booking.findByIdAndUpdate(
@@ -18,8 +20,8 @@ export async function PATCH(
     );
     if (!updatedBooking) {
       return NextResponse.json({ error: "Booking not found" }, { status: 404 });
+      return NextResponse.json(updatedBooking, { status: 200 });
     }
-    return NextResponse.json(updatedBooking);
   } catch (error) {
     console.error("Error updating booking:", error);
     return NextResponse.json(
