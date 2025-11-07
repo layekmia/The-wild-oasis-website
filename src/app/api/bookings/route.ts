@@ -1,10 +1,61 @@
 import { NextRequest, NextResponse } from "next/server";
 import { dbConnect } from "@/lib/db";
-import Booking from "@/models/Booking";
 import { eachDayOfInterval } from "date-fns";
+import Booking from "@/models/Booking";
+
+export async function POST(req: NextRequest) {
+  // Booking creation logic will go here
+  await dbConnect();
+
+  const {
+    startDate,
+    endDate,
+    numNights,
+    cabinPrice,
+    cabinId,
+    guestId,
+    numGuests,
+    observations,
+    extraPrice,
+    totalPrice,
+    isPaid,
+    hasBreakfast,
+    status,
+  } = await req.json();
+
+  try {
+    const booking = await Booking.create({
+      startDate,
+      endDate,
+      numNights,
+      cabinPrice,
+      cabinId,
+      guestId,
+      numGuests,
+      observations,
+      extraPrice,
+      totalPrice,
+      isPaid,
+      hasBreakfast,
+      status,
+    });
+
+    return NextResponse.json(booking, { status: 201 });
+  } catch (error) {
+    console.error("Error creating booking:", error);
+    return NextResponse.json(
+      { error: "Failed to create booking" },
+      { status: 500 }
+    );
+  }
+}
 
 export async function GET(req: NextRequest) {
   await dbConnect();
+
+  // ⬇️ Import after ensuring Mongoose is connected
+  const Booking = (await import("@/models/Booking")).default;
+  const Cabin = (await import("@/models/Cabin")).default;
 
   const searchParams = req.nextUrl.searchParams;
   const type = searchParams.get("type") || "list";
@@ -41,6 +92,10 @@ export async function GET(req: NextRequest) {
           );
 
         const bookings = await Booking.find({ guestId })
+          // We actually also need data on the cabins as well. But let's ONLY take the data that we actually need, in order to reduce downloaded data.
+          .select(
+            "id createdAt startDate endDate numNights numGuests totalPrice guestId cabinId cabin(name image)"
+          )
           .populate("cabinId", "name image")
           .sort({ startDate: 1 });
 
@@ -101,3 +156,4 @@ export async function GET(req: NextRequest) {
     );
   }
 }
+

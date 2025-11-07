@@ -23,7 +23,7 @@ export interface IBooking {
   totalPrice: number;
   hasBreakfast: boolean;
   isPaid: boolean;
-  observationText?: string;
+  observations?: string;
   cabinId: Types.ObjectId;
   guestId: Types.ObjectId;
   status: "confirmed" | "unconfirmed";

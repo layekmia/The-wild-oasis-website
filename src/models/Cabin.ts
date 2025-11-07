@@ -13,5 +13,5 @@ const cabinSchema = new Schema<ICabin>(
   { timestamps: true }
 );
 
-const Cabin = models.Cabin || model("Cabin", cabinSchema);
+const Cabin = models.Cabin || model<ICabin>("Cabin", cabinSchema);
 export default Cabin;

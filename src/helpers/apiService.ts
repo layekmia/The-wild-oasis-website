@@ -52,3 +52,18 @@ export async function getCabin(id: string) {
     throw new Error("Failed to fetch cabin");
   }
 }
+
+export async function getGuestByEmail(email: string) {
+  if (!email) throw new Error("Email is required");
+  try {
+    const res = await axios.get(`${baseUrl}/api/guest?email=${email}`);
+    if (!res.data) throw new Error("No data returned from API");
+    return res.data; // full guest object
+  } catch (err: any) {
+    console.error(
+      "Network or server error fetching guest by email:",
+      err.message || err
+    );
+    throw new Error("Failed to fetch guest");
+  }
+}

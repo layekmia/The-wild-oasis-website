@@ -12,7 +12,7 @@ const bookingSchema = new Schema<IBooking>(
     totalPrice: { type: Number, required: true },
     hasBreakfast: { type: Boolean, required: true },
     isPaid: { type: Boolean, required: true },
-    observationText: { type: String },
+    observations: { type: String },
     cabinId: { type: Schema.Types.ObjectId, ref: "Cabin", required: true },
     guestId: { type: Schema.Types.ObjectId, ref: "Guest", required: true },
     status: {
@@ -24,4 +24,5 @@ const bookingSchema = new Schema<IBooking>(
   { timestamps: true }
 );
 
-export default models.Booking || model<IBooking>("Booking", bookingSchema);
+const Booking = models.Booking || model("Booking", bookingSchema);
+export default Booking;
