@@ -4,9 +4,10 @@ import { dbConnect } from "@/lib/db";
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { bookingId: string } }
+  { params }: { params: Promise<{ bookingId: string }> } 
 ) {
   await dbConnect();
+
   const { bookingId } = await params;
   const updateData = await req.json();
 
@@ -18,10 +19,12 @@ export async function PATCH(
       updateData,
       { new: true }
     );
+
     if (!updatedBooking) {
       return NextResponse.json({ error: "Booking not found" }, { status: 404 });
-      return NextResponse.json(updatedBooking, { status: 200 });
     }
+
+    return NextResponse.json(updatedBooking, { status: 200 });
   } catch (error) {
     console.error("Error updating booking:", error);
     return NextResponse.json(
