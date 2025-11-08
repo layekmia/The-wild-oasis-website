@@ -9,9 +9,7 @@ export async function getCabins(): Promise<{
   error: string | null;
 }> {
   try {
-    const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/cabins`
-    );
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/cabins`);
 
     // If API returns error or empty, handle it
     if (!res.data || res.data.error) {
@@ -43,9 +41,7 @@ export async function getCabinPrice(
   }
 
   try {
-    const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/cabins?id=${id}&type=price`
-    );
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/cabins?id=${id}&type=price`);
 
     if (!res.data) {
       return {
@@ -82,9 +78,7 @@ export async function getCabin(
   }
 
   try {
-    const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/cabins?id=${id}&type=single`
-    );
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/cabins?id=${id}&type=single`);
 
     if (!res.data) {
       return { data: null, error: "No cabin data returned" };
@@ -111,9 +105,7 @@ export async function getGuestByEmail(
   }
 
   try {
-    const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/guest?email=${email}`
-    );
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/guest?email=${email}`);
 
     if (!res.data) {
       return { data: null, error: "No guest data returned" };
@@ -132,10 +124,7 @@ export async function createBooking(newBooking: Partial<IBooking>): Promise<{
   error: string | null;
 }> {
   try {
-    const res = await axios.post(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/bookings`,
-      newBooking
-    );
+    const res = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/bookings`, newBooking);
 
     if (!res.data || res.data.error)
       return {
@@ -150,6 +139,7 @@ export async function createBooking(newBooking: Partial<IBooking>): Promise<{
   }
 }
 
+
 //* Fetch single booking by ID
 export async function getBooking(
   id: string
@@ -157,9 +147,7 @@ export async function getBooking(
   if (!id) return { data: null, error: "Booking Id is required" };
 
   try {
-    const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/bookings?type=single&id=${id}`
-    );
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/bookings?type=single&id=${id}`);
     if (!res.data || res.data.error)
       return {
         data: null,
@@ -194,6 +182,7 @@ export async function getBookings(
     return { data: [], error: err.message || "Failed to fetch bookings" };
   }
 }
+
 
 //* Fetch booked dates for a cabin
 export async function getBookedDatesByCabinId(
@@ -244,15 +233,14 @@ export async function updateBooking(
   }
 }
 
+
 //* Fetch application settings
 export async function getSettings(): Promise<{
   data: settings | null;
   error: string | null;
 }> {
   try {
-    const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/settings`
-    );
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/settings`);
     if (!res.data || res.data.error)
       return {
         data: null,
