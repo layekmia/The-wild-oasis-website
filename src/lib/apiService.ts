@@ -2,7 +2,6 @@ import { IBooking, ICabin, IGuest, settings } from "@/types/models";
 import axios from "axios";
 
 // base url for API requests
-const baseUrl = "https://wildoasis-layekmias-projects.vercel.app";
 
 //* Fetch all cabins
 export async function getCabins(): Promise<{
@@ -10,7 +9,9 @@ export async function getCabins(): Promise<{
   error: string | null;
 }> {
   try {
-    const res = await axios.get(`${baseUrl}/api/cabins`);
+    const res = await axios.get(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/cabins`
+    );
 
     // If API returns error or empty, handle it
     if (!res.data || res.data.error) {
@@ -42,7 +43,9 @@ export async function getCabinPrice(
   }
 
   try {
-    const res = await axios.get(`${baseUrl}/api/cabins?id=${id}&type=price`);
+    const res = await axios.get(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/cabins?id=${id}&type=price`
+    );
 
     if (!res.data) {
       return {
@@ -79,7 +82,9 @@ export async function getCabin(
   }
 
   try {
-    const res = await axios.get(`${baseUrl}/api/cabins?id=${id}&type=single`);
+    const res = await axios.get(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/cabins?id=${id}&type=single`
+    );
 
     if (!res.data) {
       return { data: null, error: "No cabin data returned" };
@@ -106,7 +111,9 @@ export async function getGuestByEmail(
   }
 
   try {
-    const res = await axios.get(`${baseUrl}/api/guest?email=${email}`);
+    const res = await axios.get(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/guest?email=${email}`
+    );
 
     if (!res.data) {
       return { data: null, error: "No guest data returned" };
@@ -125,7 +132,10 @@ export async function createBooking(newBooking: Partial<IBooking>): Promise<{
   error: string | null;
 }> {
   try {
-    const res = await axios.post(`${baseUrl}/api/bookings`, newBooking);
+    const res = await axios.post(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/bookings`,
+      newBooking
+    );
 
     if (!res.data || res.data.error)
       return {
@@ -140,7 +150,6 @@ export async function createBooking(newBooking: Partial<IBooking>): Promise<{
   }
 }
 
-
 //* Fetch single booking by ID
 export async function getBooking(
   id: string
@@ -148,7 +157,9 @@ export async function getBooking(
   if (!id) return { data: null, error: "Booking Id is required" };
 
   try {
-    const res = await axios.get(`${baseUrl}/api/bookings?type=single&id=${id}`);
+    const res = await axios.get(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/bookings?type=single&id=${id}`
+    );
     if (!res.data || res.data.error)
       return {
         data: null,
@@ -169,7 +180,7 @@ export async function getBookings(
 
   try {
     const res = await axios.get(
-      `${baseUrl}/api/bookings?type=list&guestId=${guestId}`
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/bookings?type=list&guestId=${guestId}`
     );
     if (!res.data || res.data.error)
       return { data: [], error: res.data?.error || "No booking found" };
@@ -184,7 +195,6 @@ export async function getBookings(
   }
 }
 
-
 //* Fetch booked dates for a cabin
 export async function getBookedDatesByCabinId(
   cabinId: string
@@ -193,7 +203,7 @@ export async function getBookedDatesByCabinId(
 
   try {
     const res = await axios.get(
-      `${baseUrl}/api/bookings?type=bookedDates&cabinId=${cabinId}`
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/bookings?type=bookedDates&cabinId=${cabinId}`
     );
 
     if (!res.data || res.data.error)
@@ -217,7 +227,7 @@ export async function updateBooking(
 
   try {
     const res = await axios.put(
-      `${baseUrl}/api/bookings/${bookingId}`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/bookings/${bookingId}`,
       updateData
     );
 
@@ -234,14 +244,15 @@ export async function updateBooking(
   }
 }
 
-
 //* Fetch application settings
 export async function getSettings(): Promise<{
   data: settings | null;
   error: string | null;
 }> {
   try {
-    const res = await axios.get(`${baseUrl}/api/settings`);
+    const res = await axios.get(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/settings`
+    );
     if (!res.data || res.data.error)
       return {
         data: null,
