@@ -281,3 +281,8 @@ export async function getCountries() {
     throw new Error("Could not fetch countries");
   }
 }
+
+export async function getTestingData() {
+  const res = await axios.get("https://jsonplaceholder.typicode.com/posts");
+  return res.data;
+}
