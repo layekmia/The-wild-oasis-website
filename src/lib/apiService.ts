@@ -2,7 +2,7 @@ import { IBooking, ICabin, IGuest, settings } from "@/types/models";
 import axios from "axios";
 
 // base url for API requests
-const baseUrl = "http://localhost:3000";
+const baseUrl = "https://wildoasis-layekmias-projects.vercel.app";
 
 //* Fetch all cabins
 export async function getCabins(): Promise<{
