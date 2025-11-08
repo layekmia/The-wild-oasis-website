@@ -10,12 +10,9 @@ export async function getCabins(): Promise<{
   error: string | null;
 }> {
   try {
-    const baseUrl =
-      typeof window === "undefined"
-        ? process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000" // server side (SSR or build)
-        : ""; // client side (browser)
-
-    const res = await axios.get(`${baseUrl}/api/cabins`);
+    const res = await axios.get(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/cabins`
+    );
 
     // If API returns error or empty, handle it
     if (!res.data || res.data.error) {
