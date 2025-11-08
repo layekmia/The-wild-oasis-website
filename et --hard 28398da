@@ -1,0 +1,22 @@
+[33ma040d7c[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m HEAD@{0}: reset: moving to HEAD~1
+[33m83f215a[m HEAD@{1}: reset: moving to HEAD~1
+[33m28398da[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{2}: commit: feat: add reservation management pages and components
+[33m83f215a[m HEAD@{3}: commit: created aobut page
+[33ma040d7c[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m HEAD@{4}: commit: modify
+[33me103322[m HEAD@{5}: commit (merge): Merge branch 'main' of https://github.com/layekmia/layekmia-The-wild-oasis-website
+[33me0b4ad2[m HEAD@{6}: commit: modify
+[33mf2a2c14[m HEAD@{7}: commit: erro fix
+[33m3837e5f[m HEAD@{8}: pull: Fast-forward
+[33m665a91d[m HEAD@{9}: commit: created single cabin page
+[33m12835e0[m HEAD@{10}: commit: created cabins page
+[33m090af11[m HEAD@{11}: commit: created home page
+[33m049261c[m HEAD@{12}: commit: added daynamic route and api
+[33m545837a[m HEAD@{13}: commit: bug fix
+[33mc455033[m HEAD@{14}: commit: trying to fix bug
+[33m46bfa6c[m HEAD@{15}: commit: deleted two files
+[33mc6dbf0d[m HEAD@{16}: commit: setup tailwindcss
+[33me69845a[m HEAD@{17}: commit: handled all the apis by helper function
+[33m13458b7[m HEAD@{18}: commit: completed to create all the apies
+[33m06b9535[m HEAD@{19}: commit: created booking api
+[33m62fba62[m HEAD@{20}: commit: setup backend and create cabins api interface schemas and connect to the databse and seed the inital data
+[33m780d6ea[m HEAD@{21}: commit (initial): Initial commit from Create Next App

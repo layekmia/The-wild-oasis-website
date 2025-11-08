@@ -25,11 +25,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`bg-primary-900 text-primary-100 min-h-screen flex flex-col ${josefin.className} relative`}
+        className={`bg-primary-950 text-primary-100 min-h-screen flex flex-col ${josefin.className} relative`}
       >
         <Header />
-        <div className="py-12 px-8 flex-1">
-          <main className="max-w-7xl mx-auto">{children}</main>
+        <div className="py-12 px-8 flex-1 grid">
+          <main className="max-w-7xl mx-auto w-full">{children}</main>
         </div>
       </body>
     </html>
