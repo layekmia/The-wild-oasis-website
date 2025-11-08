@@ -5,6 +5,7 @@ export const metadata = {
   title: "Cabins",
   description: "Cabins page description",
 };
+export const dynamic = "force-dynamic";
 
 export default async function Page() {
   return (
