@@ -1,4 +1,5 @@
 import { IBooking, ICabin, IGuest, settings } from "@/types/models";
+import { IBookingPopulated } from "@/types/type";
 import axios from "axios";
 
 // base url for API requests
@@ -175,7 +176,7 @@ export async function getBooking(
 //* Fetch all bookings for a guest
 export async function getBookings(
   guestId: string
-): Promise<{ data: IBooking[]; error: string | null }> {
+): Promise<{ data: IBookingPopulated[]; error: string | null }> {
   if (!guestId) return { data: [], error: "Guest ID is required" };
 
   try {
@@ -185,7 +186,7 @@ export async function getBookings(
     if (!res.data || res.data.error)
       return { data: [], error: res.data?.error || "No booking found" };
 
-    return { data: res.data as IBooking[], error: null };
+    return { data: res.data as IBookingPopulated[], error: null };
   } catch (err: any) {
     console.error(
       "Network/server error fetching bookings:",
