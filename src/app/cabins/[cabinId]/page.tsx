@@ -10,15 +10,18 @@ export default async function Page({
   const { cabinId } = await params;
   const { data } = await getCabin(cabinId);
 
+  if (!data) {
+    return null;
+  }
+
   return (
     <div className="max-w-6xl mx-auto mt-8">
       <Cabin cabin={data} />
-      <h2
-        className="text-5xl font-semibold text-center mb-10
-       text-accent-400"
-      >
-        Reserve {data?.name} today. Pay on arrival.
+
+      <h2 className="text-5xl font-semibold text-center mb-10 text-accent-400">
+        Reserve {data.name} today. Pay on arrival.
       </h2>
+
       <Reservation />
     </div>
   );
