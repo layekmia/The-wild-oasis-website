@@ -92,11 +92,10 @@ export async function GET(req: NextRequest) {
           );
 
         const bookings = await Booking.find({ guestId })
-          // We actually also need data on the cabins as well. But let's ONLY take the data that we actually need, in order to reduce downloaded data.
           .select(
-            "id createdAt startDate endDate numNights numGuests totalPrice guestId cabinId cabin(name image)"
+            "createdAt startDate endDate numNights numGuests totalPrice guestId cabinId"
           )
-          .populate("cabinId", "name image")
+          .populate("cabinId", "name image") // only fetch name & image from Cabin
           .sort({ startDate: 1 });
 
         if (!bookings.length)
@@ -158,4 +157,3 @@ export async function GET(req: NextRequest) {
     );
   }
 }
-

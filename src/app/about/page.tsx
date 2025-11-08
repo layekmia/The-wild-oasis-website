@@ -42,6 +42,8 @@ export default async function Page() {
           src={about1}
           alt="About The Wild Oasis"
           className="object-cover"
+          placeholder="blur"
+          quality={80}
           fill
         />
       </div>
@@ -52,6 +54,8 @@ export default async function Page() {
           src={about2}
           alt="About The Wild Oasis"
           className="object-cover"
+          placeholder="blur"
+          quality={80}
           fill
         />
       </div>
