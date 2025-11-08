@@ -1,4 +1,5 @@
 import CabinList from "@/components/CabinList";
+import Spinner from "@/components/Spinner";
 import { Suspense } from "react";
 
 export const metadata = {
@@ -21,7 +22,7 @@ export default async function Page() {
         Welcome to paradise.
       </p>
 
-      <Suspense fallback={<div className="spinner mt-20"></div>}>
+      <Suspense fallback={<Spinner />}>
         <CabinList />
       </Suspense>
     </div>

@@ -1,5 +1,8 @@
 import SelectCountry from "@/components/SelectCountry";
-import Image from "next/image";
+
+export const metadata = {
+  title: 'Profile'
+}
 
 export default function Page() {
   // CHANGE

@@ -2,6 +2,10 @@ import ReservationCard from "@/components/ReservationCard";
 import { getBookings } from "@/lib/apiService";
 import Link from "next/link";
 
+export const metadata = {
+  title: "Reservations",
+};
+
 export default async function Page() {
   const { data } = await getBookings("690c037ce10286f50a18ef40");
 
