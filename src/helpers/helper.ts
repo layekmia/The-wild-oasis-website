@@ -1,5 +1,7 @@
 import { format, differenceInDays } from "date-fns";
 
+export const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "https://the-wild-oasis-backend-ten.vercel.app";
+
 export function formatBookingDates(startDate: Date, endDate: Date) {
   const start = new Date(startDate);
   const end = new Date(endDate);
@@ -11,9 +13,19 @@ export function formatBookingDates(startDate: Date, endDate: Date) {
   return `${startFormatted} (in ${days} days) — ${endFormatted}`;
 }
 
-
 export function formatBookingTime(dateNumber: Date) {
   const date = new Date(dateNumber);
   return `Booked ${format(date, "EEE, MMM dd yyyy, hh:mm a")}`;
 }
 
+export async function getCountries() {
+  try {
+    const res = await fetch(
+      "https://restcountries.com/v2/all?fields=name,flag"
+    );
+    const countries = await res.json();
+    return countries;
+  } catch {
+    throw new Error("Could not fetch countries");
+  }
+}

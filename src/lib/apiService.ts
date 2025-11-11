@@ -1,288 +1,148 @@
-import { IBooking, ICabin, IGuest, settings } from "@/types/models";
-import { IBookingPopulated } from "@/types/type";
+import { BASE_URL } from "@/helpers/helper";
 import axios from "axios";
 
-// base url for API requests
-
-//* Fetch all cabins
-export async function getCabins(): Promise<{
-  data: any[];
+// Utility type for all responses
+interface ApiResponse<T> {
+  data: T | null;
   error: string | null;
-}> {
+}
+
+// Common error handler (used in every API call)
+function handleAxiosError(err: any): ApiResponse<any> {
+  if (err.response?.data?.message) {
+    return { data: null, error: err.response.data.message };
+  }
+  if (err.response?.data?.error) {
+    return { data: null, error: err.response.data.error };
+  }
+  return { data: null, error: err.message || "Something went wrong" };
+}
+
+
+
+/* ------------------------- CABINS ------------------------- */
+
+// Get all cabins
+export async function getCabins(): Promise<ApiResponse<any[]>> {
   try {
-    const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/cabins`
-    );
-
-    // If API returns error or empty, handle it
-    if (!res.data || res.data.error) {
-      return { data: [], error: res.data?.error || "No cabins found" };
-    }
-
-    return { data: Array.isArray(res.data) ? res.data : [], error: null };
-  } catch (err: any) {
-    console.error("Network/server error fetching cabins:", err.message || err);
-    return { data: [], error: err.message || "Failed to fetch cabins" };
+    const res = await axios.get(`${BASE_URL}/api/cabins`);
+    return { data: res.data || [], error: null };
+  } catch (err) {
+    return handleAxiosError(err);
   }
 }
 
-//* Fetch cabin price interface
-interface CabinPrice {
-  regularPrice: number;
-  discount: number;
-}
-
-//* Fetch cabin price details */
-export async function getCabinPrice(
-  id: string
-): Promise<{ data: CabinPrice; error: string | null }> {
-  if (!id) {
-    return {
-      data: { regularPrice: 0, discount: 0 },
-      error: "Cabin ID is required",
-    };
-  }
-
+// Get single cabin
+export async function getCabin(id: string): Promise<ApiResponse<any>> {
+  if (!id) return { data: null, error: "Cabin ID is required" };
   try {
-    const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/cabins?id=${id}&type=price`
-    );
-
-    if (!res.data) {
-      return {
-        data: { regularPrice: 0, discount: 0 },
-        error: "No price data returned",
-      };
-    }
-
-    return {
-      data: {
-        regularPrice: res.data.regularPrice ?? 0,
-        discount: res.data.discount ?? 0,
-      },
-      error: null,
-    };
-  } catch (err: any) {
-    console.error(
-      "Network/server error fetching cabin price:",
-      err.message || err
-    );
-    return {
-      data: { regularPrice: 0, discount: 0 },
-      error: err.message || "Failed to fetch cabin price",
-    };
+    const res = await axios.get(`${BASE_URL}/api/cabins/${id}`);
+    return { data: res.data || null, error: null };
+  } catch (err) {
+    return handleAxiosError(err);
   }
 }
 
-//* Fetch single cabin by ID
-export async function getCabin(
-  id: string
-): Promise<{ data: ICabin | null; error: string | null }> {
-  if (!id) {
-    return { data: null, error: "Cabin ID is required" };
-  }
-
+// Get cabin price
+export async function getCabinPrice(id: string): Promise<ApiResponse<{ regularPrice: number; discount: number }>> {
+  if (!id) return { data: null, error: "Cabin ID is required" };
   try {
-    const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/cabins?id=${id}&type=single`
-    );
-
-    if (!res.data) {
-      return { data: null, error: "No cabin data returned" };
-    }
-
-    return { data: res.data as ICabin, error: null };
-  } catch (err: any) {
-    console.error("Network/server error fetching cabin:", err.message || err);
-    return { data: null, error: err.message || "Failed to fetch cabin" };
+    const res = await axios.get(`${BASE_URL}/api/cabins/${id}/cabin/price`);
+    return { data: res.data || { regularPrice: 0, discount: 0 }, error: null };
+  } catch (err) {
+    return handleAxiosError(err);
   }
 }
 
-//* Email validation regex
+/* ------------------------- GUESTS ------------------------- */
+
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-//* Fetch guest by email
-export async function getGuestByEmail(
-  email: string
-): Promise<{ data: IGuest | null; error: string | null }> {
-  if (!email) {
-    return { data: null, error: "Valid email is required" };
-  } else if (!emailRegex.test(email)) {
-    return { data: null, error: "Enter valid email" };
-  }
-
+export async function getGuestByEmail(email: string): Promise<ApiResponse<any>> {
+  if (!email) return { data: null, error: "Email is required" };
+  if (!emailRegex.test(email)) return { data: null, error: "Enter a valid email" };
   try {
-    const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/guest?email=${email}`
-    );
-
-    if (!res.data) {
-      return { data: null, error: "No guest data returned" };
-    }
-
-    return { data: res.data as IGuest, error: null };
-  } catch (err: any) {
-    console.error("Network/server error fetching guest:", err.message || err);
-    return { data: null, error: err.message || "Failed to fetch guest" };
+    const res = await axios.get(`${BASE_URL}/api/guests/email/${email}`);
+    return { data: res.data || null, error: null };
+  } catch (err) {
+    return handleAxiosError(err);
   }
 }
 
-//* Create a new booking
-export async function createBooking(newBooking: Partial<IBooking>): Promise<{
-  data: IBooking | null;
-  error: string | null;
-}> {
+/* ------------------------- BOOKINGS ------------------------- */
+
+// Create booking
+export async function createBooking(newBooking: Partial<any>): Promise<ApiResponse<any>> {
   try {
-    const res = await axios.post(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/bookings`,
-      newBooking
-    );
-
-    if (!res.data || res.data.error)
-      return {
-        data: null,
-        error: res.data?.error || "Failed to create booking",
-      };
-
-    return { data: res.data as IBooking, error: null };
-  } catch (err: any) {
-    console.error("Network/server error creating booking:", err.message || err);
-    return { data: null, error: err.message || "Failed to create booking" };
+    const res = await axios.post(`${BASE_URL}/api/bookings`, newBooking);
+    return { data: res.data || null, error: null };
+  } catch (err) {
+    return handleAxiosError(err);
   }
 }
 
-//* Fetch single booking by ID
-export async function getBooking(
-  id: string
-): Promise<{ data: IBooking | null; error: string | null }> {
-  if (!id) return { data: null, error: "Booking Id is required" };
-
+// Get single booking
+export async function getBooking(id: string): Promise<ApiResponse<any>> {
+  if (!id) return { data: null, error: "Booking ID is required" };
   try {
-    const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/bookings?type=single&id=${id}`
-    );
-    if (!res.data || res.data.error)
-      return {
-        data: null,
-        error: res.data?.error || "Failed to fetch booking",
-      };
-    return { data: res.data as IBooking, error: null };
-  } catch (err: any) {
-    console.error("Network/server error fetching booking:", err.message || err);
-    return { data: null, error: err.message || "Failed to fetch booking" };
+    const res = await axios.get(`${BASE_URL}/api/bookings/${id}`);
+    return { data: res.data || null, error: null };
+  } catch (err) {
+    return handleAxiosError(err);
   }
 }
 
-//* Fetch all bookings for a guest
-export async function getBookings(
-  guestId: string
-): Promise<{ data: IBookingPopulated[]; error: string | null }> {
+// Get bookings for a guest
+export async function getBookings(guestId: string): Promise<ApiResponse<any[]>> {
   if (!guestId) return { data: [], error: "Guest ID is required" };
-
   try {
-    const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/bookings?type=list&guestId=${guestId}`
-    );
-    if (!res.data || res.data.error)
-      return { data: [], error: res.data?.error || "No booking found" };
-
-    return { data: res.data as IBookingPopulated[], error: null };
-  } catch (err: any) {
-    console.error(
-      "Network/server error fetching bookings:",
-      err.message || err
-    );
-    return { data: [], error: err.message || "Failed to fetch bookings" };
+    const res = await axios.get(`${BASE_URL}/api/bookings/${guestId}/guest`);
+    return { data: res.data || [], error: null };
+  } catch (err) {
+    return handleAxiosError(err);
   }
 }
 
-//* Fetch booked dates for a cabin
-export async function getBookedDatesByCabinId(
-  cabinId: string
-): Promise<{ data: string[]; error: string | null }> {
+// Get booked dates by cabin ID
+export async function getBookedDatesByCabinId(cabinId: string): Promise<ApiResponse<string[]>> {
   if (!cabinId) return { data: [], error: "Cabin ID is required" };
-
   try {
-    const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/bookings?type=bookedDates&cabinId=${cabinId}`
-    );
-
-    if (!res.data || res.data.error)
-      return { data: [], error: res.data?.error || "No booked dates found" };
-
-    return { data: res.data as string[], error: null };
-  } catch (err: any) {
-    if (err.response?.status === 404)
-      return { data: [], error: "No booked dates found" };
-    console.error("Error fetching booked dates:", err.message || err);
-    return { data: [], error: err.message || "Failed to fetch booked dates" };
+    const res = await axios.get(`${BASE_URL}/api/bookings/${cabinId}/booked/dates`);
+    return { data: res.data || [], error: null };
+  } catch (err) {
+    return handleAxiosError(err);
   }
 }
 
-//* Update booking by ID
-export async function updateBooking(
-  bookingId: string,
-  updateData: Partial<IBooking>
-): Promise<{ data: IBooking | null; error: string | null }> {
+// Update booking
+export async function updateBooking(bookingId: string, updateData: Partial<any>): Promise<ApiResponse<any>> {
   if (!bookingId) return { data: null, error: "Booking ID is required" };
-
   try {
-    const res = await axios.put(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/bookings/${bookingId}`,
-      updateData
-    );
-
-    if (!res.data || res.data.error)
-      return {
-        data: null,
-        error: res.data?.error || "Failed to update booking",
-      };
-
-    return { data: res.data as IBooking, error: null };
-  } catch (err: any) {
-    console.error("Network/server error updating booking:", err.message || err);
-    return { data: null, error: err.message || "Failed to update booking" };
+    const res = await axios.patch(`${BASE_URL}/api/bookings/${bookingId}/update`, updateData);
+    return { data: res.data || null, error: null };
+  } catch (err) {
+    return handleAxiosError(err);
   }
 }
 
-//* Fetch application settings
-export async function getSettings(): Promise<{
-  data: settings | null;
-  error: string | null;
-}> {
+// Delete booking
+export async function deleteBooking(id: string): Promise<ApiResponse<any>> {
+  if (!id) return { data: null, error: "Booking ID is required" };
   try {
-    const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/settings`
-    );
-    if (!res.data || res.data.error)
-      return {
-        data: null,
-        error: res.data?.error || "Failed to fetch settings",
-      };
-
-    return { data: res.data as settings, error: null };
-  } catch (err: any) {
-    console.error(
-      "Network/server error fetching settings:",
-      err.message || err
-    );
-    return { data: null, error: err.message || "Failed to fetch settings" };
+    const res = await axios.delete(`${BASE_URL}/api/bookings/${id}/delete`);
+    return { data: res.data || null, error: null };
+  } catch (err) {
+    return handleAxiosError(err);
   }
 }
 
-export async function getCountries() {
-  try {
-    const res = await fetch(
-      "https://restcountries.com/v2/all?fields=name,flag"
-    );
-    const countries = await res.json();
-    return countries;
-  } catch {
-    throw new Error("Could not fetch countries");
-  }
-}
+/* ------------------------- SETTINGS ------------------------- */
 
-export async function getTestingData() {
-  const res = await axios.get("https://jsonplaceholder.typicode.com/posts");
-  return res.data;
+export async function getSettings(): Promise<ApiResponse<any>> {
+  try {
+    const res = await axios.get(`${BASE_URL}/api/setting`);
+    return { data: res.data || null, error: null };
+  } catch (err) {
+    return handleAxiosError(err);
+  }
 }
