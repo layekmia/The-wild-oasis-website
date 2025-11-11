@@ -7,7 +7,7 @@ export const metadata = {
   description: "Cabins page description",
 };
 
-export default async function Page() {
+export default function Page() {
   return (
     <div>
       <h1 className="text-4xl text-accent-400 mb-5 font-medium">

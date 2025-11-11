@@ -1,6 +1,19 @@
 import Cabin from "@/components/Cabin";
 import Reservation from "@/components/Reservation";
-import { getCabin } from "@/lib/apiService";
+import { getCabin, getCabins } from "@/lib/apiService";
+
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ cabinId: string }>;
+}) {
+  const { cabinId } = await params;
+  const {
+    data: { name },
+  } = await getCabin(cabinId);
+  return { title: `Cabin ${name}` };
+}
 
 export default async function Page({
   params,
