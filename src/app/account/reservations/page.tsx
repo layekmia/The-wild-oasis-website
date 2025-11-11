@@ -14,7 +14,7 @@ export default async function Page() {
       <h2 className="text-accent-400 font-semibold text-2xl mb-7">
         Your reservations
       </h2>
-      {data.length === 0 ? (
+      {data?.length === 0 ? (
         <p className="text-lg">
           You have on reservations yet. Check out our{" "}
           <Link href="/cabins" className="text-accent-500 underline">
@@ -23,7 +23,7 @@ export default async function Page() {
         </p>
       ) : (
         <ul className="space-y-6">
-          {data.map((booking) => (
+          {data?.map((booking) => (
             <ReservationCard key={booking._id?.toString()} booking={booking} />
           ))}
         </ul>

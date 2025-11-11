@@ -1,4 +1,4 @@
-import { getCountries } from "@/lib/apiService";
+import { getCountries } from "../helpers/helper";
 
 interface SelectCountryProps {
   defaultCountry: string;

@@ -1,4 +1,5 @@
 import { BASE_URL } from "@/helpers/helper";
+import { IBooking, ICabin } from "@/types/models";
 import axios from "axios";
 
 // Utility type for all responses
@@ -23,10 +24,10 @@ function handleAxiosError(err: any): ApiResponse<any> {
 /* ------------------------- CABINS ------------------------- */
 
 // Get all cabins
-export async function getCabins(): Promise<ApiResponse<any[]>> {
+export async function getCabins(): Promise<ApiResponse<ICabin[]>> {
   try {
     const res = await axios.get(`${BASE_URL}/api/cabins`);
-    return { data: res.data || [], error: null };
+    return { data: res.data as ICabin[] || [], error: null };
   } catch (err) {
     return handleAxiosError(err);
   }
