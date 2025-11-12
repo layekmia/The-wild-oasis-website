@@ -32,7 +32,7 @@ export default async function Page({ searchParams }: cabinsProps) {
         Welcome to paradise.
       </p>
       <Filter/>
-      <Suspense fallback={<Spinner />}>
+      <Suspense key={filter} fallback={<Spinner />}>
         <CabinList filter={filter} />
       </Suspense>
     </div>
