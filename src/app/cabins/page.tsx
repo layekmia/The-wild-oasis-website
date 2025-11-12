@@ -1,4 +1,5 @@
 import CabinList from "@/components/CabinList";
+import Filter from "@/components/Filter";
 import Spinner from "@/components/Spinner";
 import { Suspense } from "react";
 
@@ -9,7 +10,14 @@ export const metadata = {
 
 // export const revalidate = 0;
 
-export default function Page() {
+interface cabinsProps {
+  searchParams: Promise<{ [key: string]: string | undefined }>;
+}
+
+export default async function Page({ searchParams }: cabinsProps) {
+  const params = await searchParams;
+  const filter = params?.capacity ?? "all";
+
   return (
     <div>
       <h1 className="text-4xl text-accent-400 mb-5 font-medium">
@@ -23,9 +31,9 @@ export default function Page() {
         home away from home. The perfect spot for a peaceful, calm vacation.
         Welcome to paradise.
       </p>
-
+      <Filter/>
       <Suspense fallback={<Spinner />}>
-        <CabinList />
+        <CabinList filter={filter} />
       </Suspense>
     </div>
   );
