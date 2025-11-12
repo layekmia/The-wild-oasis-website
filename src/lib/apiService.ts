@@ -1,5 +1,5 @@
 import { BASE_URL } from "@/helpers/helper";
-import { IBooking, ICabin } from "@/types/models";
+import {  ICabin } from "@/types/models";
 import axios from "axios";
 
 // Utility type for all responses

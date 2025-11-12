@@ -1,7 +1,7 @@
 import Cabin from "@/components/Cabin";
 import Reservation from "@/components/Reservation";
 import { getCabin, getCabins } from "@/lib/apiService";
-
+import { notFound } from "next/navigation";
 
 export async function generateMetadata({
   params,
@@ -15,16 +15,22 @@ export async function generateMetadata({
   return { title: `Cabin ${name}` };
 }
 
+export async function generateStaticParams() {
+  const { data: cabins } = await getCabins();
+  const ids = cabins?.map((cabin) => ({ cabinId: cabin._id })) || [];
+  return ids;
+}
+
 export default async function Page({
   params,
 }: {
   params: Promise<{ cabinId: string }>;
 }) {
   const { cabinId } = await params;
-  const { data } = await getCabin(cabinId);
+  const { data, error } = await getCabin(cabinId);
 
-  if (!data) {
-    return null;
+  if (error) {
+    notFound();
   }
 
   return (

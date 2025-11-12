@@ -7,6 +7,8 @@ export const metadata = {
   description: "Cabins page description",
 };
 
+// export const revalidate = 0;
+
 export default function Page() {
   return (
     <div>

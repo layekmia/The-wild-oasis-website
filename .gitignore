@@ -11,7 +11,8 @@
 !.yarn/versions
 /starter
 
-note.txt
+note.md
+master_note.txt
 
 # testing
 /coverage

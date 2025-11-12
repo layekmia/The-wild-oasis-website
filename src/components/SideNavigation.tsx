@@ -36,6 +36,7 @@ const navLinks: NavLink[] = [
 
 export default function SideNavigation() {
   const pathname = usePathname();
+  
   return (
     <nav className="border-r border-primary-900 h-full">
       <ul className="flex flex-col gap-2 h-[70vh] text-lg">
