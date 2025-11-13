@@ -41,7 +41,9 @@ export default async function Page({
         Reserve {data.name} today. Pay on arrival.
       </h2>
 
-      <Reservation />
+      <div>
+        <Reservation />
+      </div>
     </div>
   );
 }
