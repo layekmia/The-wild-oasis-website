@@ -1,7 +1,9 @@
 import Cabin from "@/components/Cabin";
 import Reservation from "@/components/Reservation";
+import Spinner from "@/components/Spinner";
 import { getCabin, getCabins } from "@/lib/apiService";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 
 export async function generateMetadata({
   params,
@@ -27,7 +29,7 @@ export default async function Page({
   params: Promise<{ cabinId: string }>;
 }) {
   const { cabinId } = await params;
-  const { data, error } = await getCabin(cabinId);
+  const { data: cabin, error } = await getCabin(cabinId);
 
   if (error) {
     notFound();
@@ -35,15 +37,15 @@ export default async function Page({
 
   return (
     <div className="max-w-6xl mx-auto mt-8">
-      <Cabin cabin={data} />
+      <Cabin cabin={cabin} />
 
       <h2 className="text-5xl font-semibold text-center mb-10 text-accent-400">
-        Reserve {data.name} today. Pay on arrival.
+        Reserve {cabin.name} today. Pay on arrival.
       </h2>
 
-      <div>
-        <Reservation />
-      </div>
+      <Suspense fallback={<Spinner/>}>
+        <Reservation cabinId={cabinId} />
+      </Suspense>
     </div>
   );
 }

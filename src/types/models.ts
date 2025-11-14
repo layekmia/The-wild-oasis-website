@@ -1,7 +1,7 @@
 import { Types } from "mongoose";
 
 export interface ICabin {
-  _id?: Types.ObjectId;
+  _id?: string;
   name: string;
   image: string;
   description: string;

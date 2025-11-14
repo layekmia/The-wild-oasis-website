@@ -1,7 +1,8 @@
 "use client";
 
-import { isWithinInterval } from "date-fns";
-import { useState } from "react";
+import { useReservation } from "@/context/reservation";
+import { ICabin } from "@/types/models";
+import { differenceInDays, isWithinInterval } from "date-fns";
 import { DayPicker, DateRange } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 
@@ -18,20 +19,31 @@ function isAlreadyBooked(range: DateRange, datesArr: Date[]): boolean {
   );
 }
 
-function DateSelector() {
-  // CHANGE
-  const regularPrice: number = 23;
-  const discount: number = 23;
-  const numNights: number = 23;
-  const cabinPrice: number = 23;
-  const [range, setRange] = useState<DateRange | undefined>({
-    from: undefined,
-    to: undefined,
-  });
+interface DateSelectorProps {
+  cabin: ICabin;
+  setting: {
+    _id: string;
+    maxBookingLength: number;
+    minBookingLength: number;
+    maxGuestsPerBooking: number;
+    createdAt: Date;
+    updatedAt: Date;
+  };
+  bookedDates: string[] | null;
+}
+
+function DateSelector({ cabin, setting, bookedDates }: DateSelectorProps) {
+  const { range, setRange } = useReservation();
+
+  const { regularPrice, discount } = cabin;
+  const bookedDatesAsDates = bookedDates?.map((date) => new Date(date)) ?? [];
+
+  const numNights =
+    range?.from && range?.to ? differenceInDays(range.to, range.from) : 0;
+  const cabinPrice = numNights * (regularPrice - discount);
 
   // SETTINGS
-  const minBookingLength: number = 1;
-  const maxBookingLength: number = 23;
+  const { minBookingLength, maxBookingLength } = setting;
 
   const resetRange = () => setRange({ from: undefined, to: undefined });
 
@@ -41,6 +53,7 @@ function DateSelector() {
         className="pt-12 place-self-center"
         mode="range"
         required={false}
+        disabled={bookedDatesAsDates}
         min={minBookingLength + 1}
         max={maxBookingLength}
         fromMonth={new Date()}
@@ -82,7 +95,7 @@ function DateSelector() {
 
         {(range?.from || range?.to) && (
           <button
-            className="border border-primary-800 py-2 px-4 text-sm font-semibold"
+            className="border cursor-pointer border-primary-800 py-2 px-4 text-sm font-semibold"
             onClick={resetRange}
           >
             Clear

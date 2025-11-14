@@ -142,6 +142,7 @@ export async function deleteBooking(id: string): Promise<ApiResponse<any>> {
 export async function getSettings(): Promise<ApiResponse<any>> {
   try {
     const res = await axios.get(`${BASE_URL}/api/setting`);
+    //  await new Promise((res)=> setTimeout(res, 5000))
     return { data: res.data || null, error: null };
   } catch (err) {
     return handleAxiosError(err);
