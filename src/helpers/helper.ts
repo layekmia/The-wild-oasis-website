@@ -1,6 +1,6 @@
 import { format, differenceInDays } from "date-fns";
 
-export const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "https://the-wild-oasis-backend-ten.vercel.app";
+export const BASE_URL = "https://the-wild-oasis-backend-ten.vercel.app";
 
 export function formatBookingDates(startDate: Date, endDate: Date) {
   const start = new Date(startDate);

@@ -33,7 +33,7 @@ interface DateSelectorProps {
 }
 
 function DateSelector({ cabin, setting, bookedDates }: DateSelectorProps) {
-  const { range, setRange } = useReservation();
+  const { range, setRange, resetRange } = useReservation();
 
   const { regularPrice, discount } = cabin;
   const bookedDatesAsDates = bookedDates?.map((date) => new Date(date)) ?? [];
@@ -45,7 +45,7 @@ function DateSelector({ cabin, setting, bookedDates }: DateSelectorProps) {
   // SETTINGS
   const { minBookingLength, maxBookingLength } = setting;
 
-  const resetRange = () => setRange({ from: undefined, to: undefined });
+ 
 
   return (
     <div className="flex flex-col justify-between">
