@@ -15,6 +15,8 @@ export default function ReservationForm({ cabin }: Cabin) {
   const { range } = useReservation();
   const { maxCapacity } = cabin;
 
+  if (!session) return null;
+
   return (
     <div className="h-full bg-primary-900">
       <div className="flex items-center gap-5 px-16 py-2 bg-primary-800">
