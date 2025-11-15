@@ -41,7 +41,7 @@ export default function ReservationForm({ cabin }: Cabin) {
             id="numOfGuest"
             className="w-full py-3 px-5 bg-primary-200 text-primary-800 rounded-md shadow-xl"
           >
-            <option value="">Select number of guests..</option>
+            <option value="" disabled selected>Select number of guests..</option>
             {Array.from({ length: maxCapacity }, (_, num) => (
               <option key={num + 1} value={num + 1}>
                 {num + 1}
