@@ -25,7 +25,7 @@ export async function getCountries() {
     );
     const countries = await res.json();
     return countries;
-  } catch {
-    throw new Error("Could not fetch countries");
+  } catch(err:any) {
+    throw new Error("Could not fetch countries", err.message);
   }
 }
