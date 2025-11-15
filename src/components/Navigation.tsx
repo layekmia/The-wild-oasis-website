@@ -1,9 +1,9 @@
-import { getSession } from "@/helpers/getSession";
+// import { getSession } from "@/helpers/getSession";
 import Image from "next/image";
 import Link from "next/link";
 
 export default async function Navigation() {
-  const session = await getSession();
+  // const session = await getSession();
 
   
 
@@ -27,7 +27,7 @@ export default async function Navigation() {
           </Link>
         </li>
         <li>
-          {session?.user?.image ? (
+          {/* {session?.user?.image ? (
             <Link
               href="/account"
               className="hover:text-accent-400 transition-colors flex items-center gap-4"
@@ -43,14 +43,14 @@ export default async function Navigation() {
 
               <span>Guest area</span>
             </Link>
-          ) : (
+          ) : ( */}
             <Link
               className="hover:text-accent-400 transition-colors"
               href="/account"
             >
               Guest area
             </Link>
-          )}
+          {/* )} */}
         </li>
       </ul>
     </nav>

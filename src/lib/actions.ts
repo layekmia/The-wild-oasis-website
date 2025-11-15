@@ -1,15 +1,15 @@
 "use server";
 
-import { getSession } from "@/helpers/getSession";
+// import { getSession } from "@/helpers/getSession";
 import { getGuestByEmail, updateGuestProfile } from "./apiService";
 import { revalidatePath } from "next/cache";
 
 export async function updateProfile(formData: FormData) {
-  const session = await getSession();
-  if (!session) throw new Error("You must be logged in");
+  // const session = await getSession();
+  // if (!session) throw new Error("You must be logged in");
 
-  const { data: guest } = await getGuestByEmail(session.user.email as string);
-  if (!guest) throw new Error("Guest not found");
+  // const { data: guest } = await getGuestByEmail(session.user.email as string);
+  // if (!guest) throw new Error("Guest not found");
 
   const nationalID = formData.get("nationalID") as string | null;
 
@@ -25,6 +25,6 @@ export async function updateProfile(formData: FormData) {
     countryFlag = parts[1] ?? null;
   }
 
-  await updateGuestProfile(guest._id, nationalID, nationality, countryFlag);
+  // await updateGuestProfile(guest._id, nationalID, nationality, countryFlag);
   revalidatePath("/account/profile");
 }

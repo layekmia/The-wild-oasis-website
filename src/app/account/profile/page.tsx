@@ -1,6 +1,6 @@
 import SelectCountry from "@/components/SelectCountry";
 import UpdateProfile from "@/components/UpdateProfileForm";
-import { getSession } from "@/helpers/getSession";
+// import { getSession } from "@/helpers/getSession";
 import { getGuestByEmail } from "@/lib/apiService";
 
 export const metadata = {
@@ -10,10 +10,10 @@ export const metadata = {
 export default async function Page() {
   // CHANGE
 
-  const session = await getSession();
-  if (!session?.user?.email) return <div>Please log in</div>;
+  // const session = await getSession();
+  // if (!session?.user?.email) return <div>Please log in</div>;
 
-  const { data: guest } = await getGuestByEmail(session.user.email);
+  // const { data: guest } = await getGuestByEmail(session.user.email);
   if (!guest) return <div>Guest not found</div>;
 
   return (
@@ -27,14 +27,14 @@ export default async function Page() {
         faster and smoother. See you soon!
       </p>
 
-      <UpdateProfile guest={guest}>
+      {/* <UpdateProfile guest={guest}>
         <SelectCountry
           name="nationality"
           id="nationality"
           className="px-5 py-3 bg-primary-200 text-primary-800 w-full shadow-sm rounded-sm"
           defaultCountry={guest.nationality}
         />
-      </UpdateProfile>
+      </UpdateProfile> */}
     </div>
   );
 }
