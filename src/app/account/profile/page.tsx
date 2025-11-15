@@ -14,7 +14,7 @@ export default async function Page() {
   // if (!session?.user?.email) return <div>Please log in</div>;
 
   // const { data: guest } = await getGuestByEmail(session.user.email);
-  if (!guest) return <div>Guest not found</div>;
+  // if (!guest) return <div>Guest not found</div>;
 
   return (
     <div>
