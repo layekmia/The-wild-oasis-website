@@ -1,6 +1,6 @@
 import "@/app/_styles/globals.css";
 import Header from "@/components/Header";
-import { AuthProviders } from "@/context/authProvider";
+// import { AuthProviders } from "@/context/authProvider";
 import { ReservationProvider } from "@/context/reservation";
 import { Josefin_Sans } from "next/font/google";
 
@@ -29,14 +29,14 @@ export default function RootLayout({
       <body
         className={`bg-primary-950 text-primary-100 min-h-screen flex flex-col ${josefin.className} relative`}
       >
-        <AuthProviders>
+        {/* <AuthProviders> */}
           <Header />
           <div className="py-12 px-8 flex-1 grid">
             <ReservationProvider>
               <main className="max-w-7xl mx-auto w-full">{children}</main>
             </ReservationProvider>
           </div>
-        </AuthProviders>
+        {/* </AuthProviders> */}
       </body>
     </html>
   );
