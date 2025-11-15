@@ -2,7 +2,7 @@
 
 import { useReservation } from "@/context/reservation";
 import { ICabin } from "@/types/models";
-import { useSession } from "next-auth/react";
+// import { useSession } from "next-auth/react";
 import Image from "next/image";
 
 interface Cabin {
@@ -10,7 +10,7 @@ interface Cabin {
 }
 
 export default function ReservationForm({ cabin }: Cabin) {
-  const { data: session, status } = useSession();
+  // const { data: session, status } = useSession();
 
   const { range } = useReservation();
   const { maxCapacity } = cabin;
@@ -20,7 +20,7 @@ export default function ReservationForm({ cabin }: Cabin) {
       <div className="flex items-center gap-5 px-16 py-2 bg-primary-800">
         <p>Logged in as</p>
         <div className="flex gap-4 items-center">
-          <Image
+          {/* <Image
             src={session?.user?.image ?? "/default-avatar.png"}
             alt={session?.user?.name || "user profile"}
             width={32}
@@ -28,7 +28,7 @@ export default function ReservationForm({ cabin }: Cabin) {
             className="rounded-full"
             referrerPolicy="no-referrer"
           />
-          <p>{session?.user?.name}</p>
+          <p>{session?.user?.name}</p> */}
         </div>
       </div>
 
