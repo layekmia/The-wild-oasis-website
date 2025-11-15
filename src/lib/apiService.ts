@@ -94,6 +94,25 @@ export async function getGuestByEmail(
   }
 }
 
+export async function updateGuestProfile(
+  id: string,
+  nationalID: string | null,
+  nationality: string | null,
+  countryFlag: string | null
+): Promise<ApiResponse<any>> {
+  try {
+    const res = await axios.patch(`${BASE_URL}/api/guests/${id}`, {
+      nationalID,
+      nationality,
+      countryFlag,
+    });
+
+    return { data: res.data || null, error: null };
+  } catch (err) {
+    return handleAxiosError(err);
+  }
+}
+
 /* ------------------------- BOOKINGS ------------------------- */
 
 // Create booking
