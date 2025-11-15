@@ -1,5 +1,5 @@
 import { BASE_URL } from "@/helpers/helper";
-import {  ICabin } from "@/types/models";
+import { ICabin } from "@/types/models";
 import axios from "axios";
 
 // Utility type for all responses
@@ -19,15 +19,13 @@ function handleAxiosError(err: any): ApiResponse<any> {
   return { data: null, error: err.message || "Something went wrong" };
 }
 
-
-
 /* ------------------------- CABINS ------------------------- */
 
 // Get all cabins
 export async function getCabins(): Promise<ApiResponse<ICabin[]>> {
   try {
     const res = await axios.get(`${BASE_URL}/api/cabins`);
-    return { data: res.data as ICabin[] || [], error: null };
+    return { data: (res.data as ICabin[]) || [], error: null };
   } catch (err) {
     return handleAxiosError(err);
   }
@@ -45,7 +43,9 @@ export async function getCabin(id: string): Promise<ApiResponse<any>> {
 }
 
 // Get cabin price
-export async function getCabinPrice(id: string): Promise<ApiResponse<{ regularPrice: number; discount: number }>> {
+export async function getCabinPrice(
+  id: string
+): Promise<ApiResponse<{ regularPrice: number; discount: number }>> {
   if (!id) return { data: null, error: "Cabin ID is required" };
   try {
     const res = await axios.get(`${BASE_URL}/api/cabins/${id}/cabin/price`);
@@ -59,9 +59,33 @@ export async function getCabinPrice(id: string): Promise<ApiResponse<{ regularPr
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export async function getGuestByEmail(email: string): Promise<ApiResponse<any>> {
+export async function createGuest({
+  name,
+  email,
+}: {
+  name: string;
+  email: string;
+}): Promise<ApiResponse<any>> {
   if (!email) return { data: null, error: "Email is required" };
-  if (!emailRegex.test(email)) return { data: null, error: "Enter a valid email" };
+  if (!emailRegex.test(email))
+    return { data: null, error: "Enter a valid email" };
+  try {
+    const res = await axios.post(`${BASE_URL}/api/guests`, {
+      fullName: name,
+      email,
+    });
+    return { data: res.data || null, error: null };
+  } catch (err) {
+    return handleAxiosError(err);
+  }
+}
+
+export async function getGuestByEmail(
+  email: string
+): Promise<ApiResponse<any>> {
+  if (!email) return { data: null, error: "Email is required" };
+  if (!emailRegex.test(email))
+    return { data: null, error: "Enter a valid email" };
   try {
     const res = await axios.get(`${BASE_URL}/api/guests/email/${email}`);
     return { data: res.data || null, error: null };
@@ -73,7 +97,9 @@ export async function getGuestByEmail(email: string): Promise<ApiResponse<any>> 
 /* ------------------------- BOOKINGS ------------------------- */
 
 // Create booking
-export async function createBooking(newBooking: Partial<any>): Promise<ApiResponse<any>> {
+export async function createBooking(
+  newBooking: Partial<any>
+): Promise<ApiResponse<any>> {
   try {
     const res = await axios.post(`${BASE_URL}/api/bookings`, newBooking);
     return { data: res.data || null, error: null };
@@ -94,7 +120,9 @@ export async function getBooking(id: string): Promise<ApiResponse<any>> {
 }
 
 // Get bookings for a guest
-export async function getBookings(guestId: string): Promise<ApiResponse<any[]>> {
+export async function getBookings(
+  guestId: string
+): Promise<ApiResponse<any[]>> {
   if (!guestId) return { data: [], error: "Guest ID is required" };
   try {
     const res = await axios.get(`${BASE_URL}/api/bookings/${guestId}/guest`);
@@ -105,10 +133,14 @@ export async function getBookings(guestId: string): Promise<ApiResponse<any[]>> 
 }
 
 // Get booked dates by cabin ID
-export async function getBookedDatesByCabinId(cabinId: string): Promise<ApiResponse<string[]>> {
+export async function getBookedDatesByCabinId(
+  cabinId: string
+): Promise<ApiResponse<string[]>> {
   if (!cabinId) return { data: [], error: "Cabin ID is required" };
   try {
-    const res = await axios.get(`${BASE_URL}/api/bookings/${cabinId}/booked/dates`);
+    const res = await axios.get(
+      `${BASE_URL}/api/bookings/${cabinId}/booked/dates`
+    );
     return { data: res.data || [], error: null };
   } catch (err) {
     return handleAxiosError(err);
@@ -116,10 +148,16 @@ export async function getBookedDatesByCabinId(cabinId: string): Promise<ApiRespo
 }
 
 // Update booking
-export async function updateBooking(bookingId: string, updateData: Partial<any>): Promise<ApiResponse<any>> {
+export async function updateBooking(
+  bookingId: string,
+  updateData: Partial<any>
+): Promise<ApiResponse<any>> {
   if (!bookingId) return { data: null, error: "Booking ID is required" };
   try {
-    const res = await axios.patch(`${BASE_URL}/api/bookings/${bookingId}/update`, updateData);
+    const res = await axios.patch(
+      `${BASE_URL}/api/bookings/${bookingId}/update`,
+      updateData
+    );
     return { data: res.data || null, error: null };
   } catch (err) {
     return handleAxiosError(err);

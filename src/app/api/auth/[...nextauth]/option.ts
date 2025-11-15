@@ -1,5 +1,6 @@
 import GoogleProvider from "next-auth/providers/google";
 import type { NextAuthOptions } from "next-auth";
+import { createGuest } from "@/lib/apiService";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -34,8 +35,24 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
 
-    async signIn() {
-      return true;
+    async signIn({ user }) {
+      if (!user?.email || !user?.name) {
+        console.error("SignIn callback: missing user info");
+        return false;
+      }
+
+      const guestData = {
+        name: user.name,
+        email: user.email,
+      };
+
+      try {
+        await createGuest(guestData);
+        return true;
+      } catch (err) {
+        console.error("SignIn callback error:", err);
+        return false;
+      }
     },
   },
   pages: {
