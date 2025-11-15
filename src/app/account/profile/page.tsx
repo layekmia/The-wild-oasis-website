@@ -11,8 +11,10 @@ export default async function Page() {
   // CHANGE
 
   const session = await getSession();
-  const { data: guest } = await getGuestByEmail(session?.user?.email as string);
+  if (!session?.user?.email) return <div>Please log in</div>;
 
+  const { data: guest } = await getGuestByEmail(session.user.email);
+  if (!guest) return <div>Guest not found</div>;
 
   return (
     <div>
