@@ -19,17 +19,21 @@ export default function ReservationForm({ cabin }: Cabin) {
     <div className="h-full bg-primary-900">
       <div className="flex items-center gap-5 px-16 py-2 bg-primary-800">
         <p>Logged in as</p>
-        <div className="flex gap-4 items-center">
-          <Image
-            src={session?.user?.image ?? "/default-avatar.png"}
-            alt={session?.user?.name || "user profile"}
-            width={32}
-            height={32}
-            className="rounded-full"
-            referrerPolicy="no-referrer"
-          />
-          <p>{session?.user?.name}</p>
-        </div>
+        {session?.user && (
+          <>
+            <div className="flex gap-4 items-center">
+              <Image
+                src={session?.user?.image ?? ""}
+                alt={session?.user?.name || "user profile"}
+                width={32}
+                height={32}
+                className="rounded-full"
+                referrerPolicy="no-referrer"
+              />
+              <p>{session?.user?.name}</p>
+            </div>
+          </>
+        )}
       </div>
 
       <form className="flex flex-col gap-5 bg-primary-900 px-16 py-10 text-lg">
@@ -41,7 +45,9 @@ export default function ReservationForm({ cabin }: Cabin) {
             id="numOfGuest"
             className="w-full py-3 px-5 bg-primary-200 text-primary-800 rounded-md shadow-xl"
           >
-            <option value="" disabled selected>Select number of guests..</option>
+            <option value="" disabled selected>
+              Select number of guests..
+            </option>
             {Array.from({ length: maxCapacity }, (_, num) => (
               <option key={num + 1} value={num + 1}>
                 {num + 1}

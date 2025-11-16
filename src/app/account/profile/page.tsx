@@ -13,6 +13,8 @@ export default async function Page() {
   const session = await getSession();
   const { data: guest } = await getGuestByEmail(session?.user?.email as string);
 
+  console.log(session?.user.id);
+
   return (
     <div>
       <h2 className="font-semibold text-2xl text-accent-400 mb-4">
