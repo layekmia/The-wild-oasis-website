@@ -15,6 +15,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import SpinnerMini from "./SpinnerMini";
 
 export default function DeleteReservation({
   bookingId,
@@ -31,8 +32,16 @@ export default function DeleteReservation({
     <AlertDialog>
       <AlertDialogTrigger asChild>
         <button className="group flex cursor-pointer items-center gap-2 uppercase text-xs font-bold text-primary-300 grow px-3 hover:bg-accent-600 transition-colors hover:text-primary-900">
-          <TrashIcon className="h-5 w-5 text-primary-600 group-hover:text-primary-800 transition-colors" />
-          <span className="mt-1">Delete</span>
+          {!isPending ? (
+            <>
+              <TrashIcon className="h-5 w-5 text-primary-600 group-hover:text-primary-800 transition-colors" />
+              <span className="mt-1">Delete</span>
+            </>
+          ) : (
+            <span className="mx-auto">
+              <SpinnerMini />
+            </span>
+          )}
         </button>
       </AlertDialogTrigger>
       <AlertDialogContent className="bg-primary-950 border-primary-700">
@@ -51,7 +60,7 @@ export default function DeleteReservation({
             onClick={handleDelete}
             className="bg-primary-800 text-primary-200 cursor-pointer"
           >
-            {isPending ? "Deleting..." : "Delete"}
+            Delete
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
